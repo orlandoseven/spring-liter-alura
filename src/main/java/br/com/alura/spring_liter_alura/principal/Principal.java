@@ -50,7 +50,8 @@ public class Principal {
                     buscarLivros();
                     break;
                 case 2:
-                    System.out.println("Buscar livros registrados");
+                    System.out.println("Buscar livros registrados\n");
+                    buscarLivrosRegistrados();
                     break;
                 case 3:
                     System.out.println("Listar os autores");
@@ -69,17 +70,15 @@ public class Principal {
                     System.out.println("Opção inválida!");
             }
         }
-
     }
 
     private void buscarLivros() {
      ResultsGutendex dadosLivro = getDadosLivro();
         DadosLivro livroBuscado = dadosLivro.getResultado().get(0);
         Livro livro = new Livro(livroBuscado);
+        listaLivros.add(livro);
         System.out.println("  Livro Buscado:\n"+livro);
-
     }
-
 
     private ResultsGutendex getDadosLivro() {
         System.out.println("Digite o nome do livro:");
@@ -87,9 +86,12 @@ public class Principal {
         var url = ENDERECO + nomeLivro.replace(" ","%20");
         var json = consumo.obterDados(url);
         //System.out.println(json);
-
         var listaResultado  = conversor.obterDados(json, ResultsGutendex.class);
         return listaResultado;
+    }
+
+    private void buscarLivrosRegistrados(){
+     listaLivros.forEach(System.out::println);
     }
 
 

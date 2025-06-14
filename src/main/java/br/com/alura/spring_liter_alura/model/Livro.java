@@ -6,7 +6,7 @@ public class Livro {
 
      private String titulo;
      private Integer downlond;
-     private String idioma;
+     private Idioma idioma;
      private Autor autor;
 
      public Livro(){}
@@ -14,12 +14,13 @@ public class Livro {
     public Livro(DadosLivro dadosLivro) {
          this.titulo = dadosLivro.getTitulo();
          this.autor = new Autor(dadosLivro.getAutores().get(0));
-         this.idioma = dadosLivro.getIdioma().get(0);
+         //this.idioma = dadosLivro.getIdioma().get(0);
+        this.idioma = Idioma.fromString(dadosLivro.getIdioma().get(0));
          this.downlond = dadosLivro.getDownlond();
 
     }
 
-    public Livro(String titulo, Integer downlond, String idioma, Autor autor) {
+    public Livro(String titulo, Integer downlond, Idioma idioma, Autor autor) {
         this.titulo = titulo;
         this.downlond = downlond;
         this.idioma = idioma;
@@ -42,11 +43,11 @@ public class Livro {
         this.downlond = downlond;
     }
 
-    public String getIdioma() {
+    public Idioma getIdioma() {
         return idioma;
     }
 
-    public void setIdioma(String idioma) {
+    public void setIdioma(Idioma idioma) {
         this.idioma = idioma;
     }
 
