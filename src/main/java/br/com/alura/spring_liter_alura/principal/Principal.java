@@ -1,11 +1,32 @@
 package br.com.alura.spring_liter_alura.principal;
 
-import org.hibernate.event.spi.SaveOrUpdateEvent;
+
+import br.com.alura.spring_liter_alura.model.Autor;
+import br.com.alura.spring_liter_alura.model.DadosLivro;
+import br.com.alura.spring_liter_alura.model.Livro;
+import br.com.alura.spring_liter_alura.model.ResultsGutendex;
+import br.com.alura.spring_liter_alura.service.ConsumoApi;
+import br.com.alura.spring_liter_alura.service.ConverterDados;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.Scanner;
 
 public class Principal {
-private Scanner leitura = new Scanner(System.in);
+
+    private Scanner leitura = new Scanner(System.in);
+    private final String ENDERECO = "https://gutendex.com/books/?search=";
+
+    private ConsumoApi consumo = new ConsumoApi();
+    private ConverterDados conversor =  new ConverterDados();
+
+    private List<Autor> listaUtores = new ArrayList<>();
+    private List<Livro> listaLivros = new ArrayList<>();
+
+    //List<ResultsGutendex> dadosLivro = new ArrayList<>();
+
+
 
     public void exibirMenu(){
         var opcao = -1;
@@ -26,7 +47,7 @@ private Scanner leitura = new Scanner(System.in);
 
             switch (opcao){
                 case 1:
-                    System.out.println("Buscar livro pelo titluo");
+                    buscarLivros();
                     break;
                 case 2:
                     System.out.println("Buscar livros registrados");
@@ -50,5 +71,27 @@ private Scanner leitura = new Scanner(System.in);
         }
 
     }
+
+    private void buscarLivros() {
+     ResultsGutendex dadosLivro = getDadosLivro();
+        DadosLivro livroBuscado = dadosLivro.getResultado().get(0);
+        Livro livro = new Livro(livroBuscado);
+        System.out.println("  Livro Buscado:\n"+livro);
+
+    }
+
+
+    private ResultsGutendex getDadosLivro() {
+        System.out.println("Digite o nome do livro:");
+        var nomeLivro = leitura.nextLine();
+        var url = ENDERECO + nomeLivro.replace(" ","%20");
+        var json = consumo.obterDados(url);
+        //System.out.println(json);
+
+        var listaResultado  = conversor.obterDados(json, ResultsGutendex.class);
+        return listaResultado;
+    }
+
+
 
 }
