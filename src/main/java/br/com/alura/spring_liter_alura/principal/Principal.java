@@ -8,11 +8,8 @@ import br.com.alura.spring_liter_alura.service.ConsumoApi;
 import br.com.alura.spring_liter_alura.service.ConverterDados;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Principal {
 
@@ -65,10 +62,13 @@ public class Principal {
                     listarAutor();
                     break;
                 case 4:
+
                     System.out.println("Listar autores em um ano");
+                    buscarAutoresPorAno();
                     break;
                 case 5:
-                    System.out.println("Listar livros determinado ano");
+                    System.out.println("Listar livros determinado pelo idioma");
+                    quantidadeDeLivrosPorIdioma();
                     break;
 
                 case 0:
@@ -119,7 +119,23 @@ public class Principal {
         listaAutores = autorRepository.findAll();
         listaAutores.stream().forEach(System.out::println);
     }
+    private void buscarAutoresPorAno(){
 
+        System.out.println("Informe um ano para buscar autor");
+        var anoAutor = leitura.nextInt();
+        leitura.nextLine();
+        List<Autor> buscarAnoAutor = autorRepository.findAllByAno(anoAutor);
+        buscarAnoAutor.forEach(a -> System.out.println(a.getNome()));
+
+    }
+
+    private void quantidadeDeLivrosPorIdioma(){
+        System.out.println("Digite um idioma para buscar quantidade de livros");
+        var idiomaEscolhido = leitura.nextLine();
+       var quantidadeLivro = repositorio.countByIdioma(Idioma.valueOf(idiomaEscolhido.toUpperCase()));
+        System.out.println("Quantidade de livro(s) em "+ idiomaEscolhido +": " +quantidadeLivro);
+
+    }
 
 
 }
