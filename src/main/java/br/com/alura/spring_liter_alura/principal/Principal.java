@@ -1,14 +1,15 @@
 package br.com.alura.spring_liter_alura.principal;
 
 
-import br.com.alura.spring_liter_alura.model.Autor;
-import br.com.alura.spring_liter_alura.model.DadosLivro;
-import br.com.alura.spring_liter_alura.model.Livro;
-import br.com.alura.spring_liter_alura.model.ResultsGutendex;
+import br.com.alura.spring_liter_alura.model.*;
+import br.com.alura.spring_liter_alura.repository.AutorRepository;
+import br.com.alura.spring_liter_alura.repository.LivroRepository;
 import br.com.alura.spring_liter_alura.service.ConsumoApi;
 import br.com.alura.spring_liter_alura.service.ConverterDados;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import java.util.Scanner;
@@ -21,11 +22,15 @@ public class Principal {
     private ConsumoApi consumo = new ConsumoApi();
     private ConverterDados conversor =  new ConverterDados();
 
-    private List<Autor> listaUtores = new ArrayList<>();
+    private LivroRepository repositorio;
+    private AutorRepository autorRepository;
+
+    private List<Autor> listaAutores = new ArrayList<>();
     private List<Livro> listaLivros = new ArrayList<>();
 
-    //List<ResultsGutendex> dadosLivro = new ArrayList<>();
-
+    public Principal(LivroRepository repositorio) {
+        this.repositorio = repositorio;
+    }
 
 
     public void exibirMenu(){
@@ -54,7 +59,9 @@ public class Principal {
                     buscarLivrosRegistrados();
                     break;
                 case 3:
+
                     System.out.println("Listar os autores");
+                    listarAutor();
                     break;
                 case 4:
                     System.out.println("Listar autores em um ano");
@@ -72,11 +79,20 @@ public class Principal {
         }
     }
 
+
+
     private void buscarLivros() {
      ResultsGutendex dadosLivro = getDadosLivro();
         DadosLivro livroBuscado = dadosLivro.getResultado().get(0);
+        DadosAutor autorLivro = livroBuscado.getAutores().get(0);
+        Autor autor = new Autor(autorLivro);
         Livro livro = new Livro(livroBuscado);
-        listaLivros.add(livro);
+        //listaLivros.add(livro);
+        //listaAutores.add(autor);
+        repositorio.save(livro);
+        autorRepository.save(autor);
+
+
         System.out.println("  Livro Buscado:\n"+livro);
     }
 
@@ -91,7 +107,15 @@ public class Principal {
     }
 
     private void buscarLivrosRegistrados(){
-     listaLivros.forEach(System.out::println);
+     List<Livro> livros = repositorio.findAll();
+     livros.stream()
+                     .sorted(Comparator.comparing(Livro::getTitulo))
+                             .forEach(System.out::println);
+     //listaLivros.forEach(System.out::println);
+    }
+
+    private void listarAutor() {
+        listaAutores.forEach(System.out::println);
     }
 
 

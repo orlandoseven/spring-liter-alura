@@ -1,12 +1,21 @@
 package br.com.alura.spring_liter_alura.model;
 
 
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "livros")
 public class Livro {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private Long id;
      private String titulo;
      private Integer downlond;
+     @Enumerated(EnumType.STRING)
      private Idioma idioma;
+
+     @ManyToOne(cascade = CascadeType.PERSIST)
      private Autor autor;
 
      public Livro(){}
@@ -20,11 +29,20 @@ public class Livro {
 
     }
 
-    public Livro(String titulo, Integer downlond, Idioma idioma, Autor autor) {
-        this.titulo = titulo;
+    public Livro(Long id,String titulo, Integer downlond, Idioma idioma, Autor autor) {
+        this.id = id;
+         this.titulo = titulo;
         this.downlond = downlond;
         this.idioma = idioma;
         this.autor = autor;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -63,9 +81,9 @@ public class Livro {
     public String toString() {
         return "Livro: "
                  + titulo + "\n" +
-                "Autor= "+ autor.getNome() +"\n"+
+                "Autor= "+ autor +"\n"+
                 "Downlond= " + downlond + "\n" +
-                "Idioma= " + idioma
+                "Idioma= " + idioma + "\n"
                 ;
     }
 }
