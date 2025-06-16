@@ -72,7 +72,7 @@ public class Autor{
     public String toString() {
         return   nome +"\n"+
                 "AnoNascimento= " + anoNascimento + "\n"+
-                "AnoMorte= " + anoMorte
+                "AnoMorte= " + anoMorte + "\n"
                 ;
     }
 }

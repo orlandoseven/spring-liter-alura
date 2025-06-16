@@ -28,8 +28,9 @@ public class Principal {
     private List<Autor> listaAutores = new ArrayList<>();
     private List<Livro> listaLivros = new ArrayList<>();
 
-    public Principal(LivroRepository repositorio) {
+    public Principal(LivroRepository repositorio,AutorRepository autorRepository) {
         this.repositorio = repositorio;
+        this.autorRepository = autorRepository;
     }
 
 
@@ -115,7 +116,8 @@ public class Principal {
     }
 
     private void listarAutor() {
-        listaAutores.forEach(System.out::println);
+        listaAutores = autorRepository.findAll();
+        listaAutores.stream().forEach(System.out::println);
     }
 
 
